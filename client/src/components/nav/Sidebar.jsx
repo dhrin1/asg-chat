@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useRef, Fragment } from 'react'
 import {  ModalDataContext, UserDataContext } from '../../context/ContextProvider';
 import { useState } from 'react';
 
@@ -14,6 +13,8 @@ import UsersListCard from '../cards/UsersListCard';
 import ContactList from '../cards/ContactList';
 import ModalGroup from '../modals/modalGroup';
 
+import { Menu, Transition } from '@headlessui/react'
+
 
 
 export default function Sidebar() {
@@ -27,7 +28,7 @@ export default function Sidebar() {
         value: ''
     })
 
-    const { chats, setChats, search, setSearch, setContacts, load, setLoad } = ChatState();
+    const { chats, setChats, search, setSearch, setContacts, load, setLoad, notif, setNotif } = ChatState();
 
     useEffect(()=>{
         if(keyword.isSearch) {
@@ -69,6 +70,11 @@ export default function Sidebar() {
         setIsOpen({ visible: true, target: "group", action: "add" })
         setContacts([])
     }
+
+    const handleClickNotif = (item) => {
+        setContacts(item.chat)
+    }
+    
     return (
         <>
         <nav className="h-screen bg-white border-l shadow-md px-2 overflow-hidden">
@@ -78,9 +84,61 @@ export default function Sidebar() {
                     <AiOutlinePlus size={20} />
                     New group
                 </button>
-                <button className="bg-gray-200 hover:bg-gray-300 px-3 justify-center rounded-md text-gray-800 h-10 flex items-center gap-x-2 font-semibold">
-                    <IoNotifications size={20} />
-                </button>
+                <Menu as="div" className="relative inline-block text-end">
+                    <div>
+                        <Menu.Button className="bg-gray-200 hover:bg-gray-300 px-3 justify-center rounded-md text-gray-800 h-10  gap-x-2 font-semibold relative inline-block" >
+                            <IoNotifications size={20} />
+                            <label className="absolute ms-2 rounded-full bg-green-500 text-white font-medium w-4 h-4 text-center ">
+                                <p className="text-xs">{notif.length}</p>
+                            </label>
+                        </Menu.Button>
+                    </div>
+                    <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                    >
+                            
+                    <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div className="py-1">
+                            {notif.length > 0 ?
+                            notif.map((item,idx)=>(
+                                <Menu.Item key={idx}  >
+                                    {({ active }) => (
+                                        <>
+                                        <button      
+                                            onClick={()=>handleClickNotif(item)}  
+                                            className={`${
+                                                active ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
+                                            } group grid w-full items-center py-2 text-xs px-2`}
+                                        >
+                                            {item.sender.name}: {item.content}
+                                        </button>
+                                        </>
+                                    )}
+                                    
+                                </Menu.Item>
+                            ))
+                            
+                            : <Menu.Item>
+                            {({ active }) => (
+                                <button        
+                                    className={`${
+                                        active ? 'bg-gray-200 text-gray-900' : 'text-gray-900'
+                                    } group flex w-full items-center py-2 text-sm px-2`}
+                                >
+                                    No available notification
+                                </button>
+                            )}
+                        </Menu.Item> }
+                            </div>
+                        </Menu.Items>
+                        </Transition>
+                    </Menu>
                 </div>
             
                 <h2 className="text-4xl font-semibold">

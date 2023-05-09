@@ -7,7 +7,7 @@ export default function ChatListItem(props) {
     const auth = UserDataContext()
     const { onClick: handleClick,  data: { _id,  chatName, users, isGroup, latestMessage  }, active } = props
   return (
-    <Link to={`t/${_id}`} onClick={handleClick} className={`w-full h-[70px] py-2 px-2 hover:bg-gray-200 rounded-md ${active?`bg-gray-200`:''}`} >
+    <Link to={`t/${_id}`} onClick={handleClick} className={`w-full h-[70px] items-center py-2 px-2 hover:bg-gray-200 rounded-md ${active?`bg-gray-200`:''}`} >
         <div className="flex gap-x-2 items-center">
             {isGroup ?
                 <>

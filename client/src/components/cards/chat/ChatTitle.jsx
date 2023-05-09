@@ -7,7 +7,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { ModalDataContext, UserDataContext } from '../../../context/ContextProvider'
 import ModalDetails from '../../modals/ModalDetails'
 import moment from 'moment'
-import { ChatState } from '../../../context/ChatProvider'
+
 
 export default function ChatTitle(props) {
     const { info, user } = props

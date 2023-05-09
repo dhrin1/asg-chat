@@ -8,8 +8,6 @@ import ChatForm from '../cards/chat/ChatForm';
 import { UserDataContext } from '../../context/ContextProvider';
 import { getAllMessage, getSendMessage } from '../../helper/messageHelper';
 import io from 'socket.io-client';
-
-import Lottie from 'react-lottie'
 import animate from '../../../public/assets/animations/typing.json'
 
 const defaultOptions = {
@@ -86,7 +84,7 @@ export default function Chats() {
         }
         fetchMsg();
         selectedChatCompare = contacts;
-    },[contacts])
+    },[contacts, setContacts, reload])
 
     
 
@@ -103,14 +101,13 @@ export default function Chats() {
         })
     })
 
-
     const onType = (e) => {
         setMessage({ ...message, content: e.target.value});
         if(!isSocketConnected) return;
 
         if (!typing)  {
             setTyping(true);
-            socket.emit("typing", contacts._id);
+            socket.emit("  ", contacts._id);
         }
         let lastTypingTime = new Date().getTime();
         var timerLength = 3000;
